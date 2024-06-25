@@ -21,8 +21,8 @@ export default function Projects(){
   const map = useRef(null);
   const [isMissionInit, setIsMissionInit] = useState(false)
   const [mapObj, setMapObj] = useState<any>();
-  const [lng, setLng] = useState(-44.247196);
-  const [lat, setLat] = useState(-2.614339);
+  const [lng, setLng] = useState(-44.27920);
+  const [lat, setLat] = useState(-2.536693);
   const [zoom, setZoom] = useState(17);
   const [current_mission, setMission] = useState<MissionModel>()
   
@@ -134,8 +134,18 @@ export default function Projects(){
     }
   }
   
+  async function save_mission(){
+    await fetch('http://127.0.0.1:5000/mission', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(current_mission)
+    }).then(async response => console.log(await response.json()))
+    .catch(error => console.error(error));
+  }
   
-    return (
+  return (
     <>
       <div className='flex flex-row space-x-10'>
           <div ref={mapContainer} className="map-container basis-1/3 border rounded-md p-1" />
@@ -378,8 +388,9 @@ export default function Projects(){
                     </Table>
                     </ScrollArea>
 
-                  <div className='flex w-full mb-3 mt-3'>
+                  <div className='grid grid-cols-2 space-x-2 w-full mb-3 mt-3'>
                     <Button className='right-0' onClick={add_waypoint_}>Adicionar Waypoint</Button>
+                    <Button className='right-0' variant="destructive" onClick={save_mission}>Salvar</Button>
                   </div>
                     
                 </div>

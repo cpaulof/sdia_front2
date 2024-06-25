@@ -101,19 +101,21 @@ function createMissionArea(coords:any, map:any){
 // }
 
 export default function Mission({mission, map}:InferProps<typeof Mission.propTypes>){
-    const [mapLoaded, setMapLoaded] = useState(true);
+    const [mapLoaded, setMapLoaded] = useState(false);
     const [markers, setMarkers] = useState<any>([])
     const [coords, setCoords] = useState<any>([])
     console.log(mapLoaded, markers.length);
     if(!mission) return (<div>No Mission</div>);
     if(!map) return (<div>No Mission</div>);
-    
+
+    if(map.isStyleLoaded()){
+        if(!mapLoaded) setMapLoaded(true);
+    }
     map.on('load', ()=>{
         if(!mapLoaded)setMapLoaded(true);
     });
 
     if(mapLoaded){
-        
         try{
             map.removeLayer('mission_area');
             map.removeSource('mission_area');
@@ -125,6 +127,7 @@ export default function Mission({mission, map}:InferProps<typeof Mission.propTyp
         console.log(coords_.length);
         createMissionArea(coords_, map);
         addPOIMarker(mission.point_of_interest, map);
+        map.setCenter(mission.point_of_interest.split(':').reverse().map((e:string)=>{return parseFloat(e)}))
         if(mission.waypoints.length!=coords[0]?.length){
             console.log('--------------------')
             console.log(mission.waypoints.length)
@@ -168,7 +171,7 @@ export default function Mission({mission, map}:InferProps<typeof Mission.propTyp
                             <TableBody>
                                 <TableRow>
                                     <TableCell className="font-small">Ponto de Interesse</TableCell>
-                                    <TableCell className="text-center font-small">{mission.point_of_interest} (lat/lng)</TableCell>
+                                    <TableCell className="text-center font-small">{mission.point_of_interest.split(':').map((e:string)=>{return parseFloat(e).toFixed(5)}).join(":")} (lat/lng)</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-small">Velocidade de Voo Padrão</TableCell>

@@ -26,7 +26,7 @@ function App() {
           <Route index element={<AboutMe />} />
           <Route path="projects" element={<Projects />} />
           <Route path="aboutme" element={<AboutMe />} />
-          <Route path="exp" element={<Experience />} />
+          <Route path="exp/:mission_id" element={<Experience />} />
           <Route path="blog" element={<Blog />} />
           <Route path="aboutme" element={<AboutMe />} />
           <Route path="*" element={<h1 className='text-3xl font-semibold'>Página não encontrada!</h1>} />
